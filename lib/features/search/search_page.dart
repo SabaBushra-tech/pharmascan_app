@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/models/medicine.dart';
-import '../../core/repository/medicine_repository.dart';
+import 'package:pharmascan_app/core/models/medicine.dart';
+import 'package:pharmascan_app/features/medicine/medicine_service.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -10,7 +10,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final MedicineRepository _repo = MedicineRepository();
+  final MedicineService _service = MedicineService();
   List<Medicine> medicines = [];
   List<Medicine> filteredMedicines = [];
 
@@ -21,7 +21,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> loadMedicines() async {
-    medicines = await _repo.fetchAllMedicines();
+    medicines = await _service.fetchMedicines();
     setState(() {
       filteredMedicines = medicines;
     });

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/models/medicine.dart';
-import '../../core/repository/medicine_repository.dart';
+import 'package:pharmascan_app/core/models/medicine.dart';
+import 'package:pharmascan_app/features/medicine/medicine_service.dart';
 
 class MedicineFormPage extends StatefulWidget {
   final Medicine? medicine;
@@ -13,7 +13,7 @@ class MedicineFormPage extends StatefulWidget {
 
 class _MedicineFormPageState extends State<MedicineFormPage> {
   final _formKey = GlobalKey<FormState>();
-  final MedicineRepository _repo = MedicineRepository();
+  final MedicineService _service = MedicineService();
 
   late TextEditingController _brandNameEnController;
   late TextEditingController _genericNameEnController;
@@ -57,7 +57,7 @@ class _MedicineFormPageState extends State<MedicineFormPage> {
   Future<void> _saveMedicine() async {
     if (_formKey.currentState!.validate()) {
       final med = Medicine(
-        id: widget.medicine?.id ?? DateTime.now().millisecondsSinceEpoch,
+        id: widget.medicine?.id,
         brandNameEn: _brandNameEnController.text,
         genericNameEn: _genericNameEnController.text,
         brandNameBn: _brandNameBnController.text,
@@ -72,9 +72,9 @@ class _MedicineFormPageState extends State<MedicineFormPage> {
 
       try {
         if (widget.medicine == null) {
-          await _repo.addMedicine(med);
+          await _service.addMedicine(med);
         } else {
-          await _repo.updateMedicine(med);
+          await _service.updateMedicine(med);
         }
 
         if (!mounted) return;

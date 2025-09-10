@@ -20,7 +20,7 @@ class _OcrSearchPageState extends State<OcrSearchPage> {
   }
 
   Future<void> _loadMedicines() async {
-    final meds = await MedicineService().getMedicines();
+    final meds = await MedicineService().fetchMedicines();
     setState(() {
       medicines = meds;
     });

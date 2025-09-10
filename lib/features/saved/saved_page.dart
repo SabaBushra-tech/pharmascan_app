@@ -17,12 +17,12 @@ class _SavedPageState extends State<SavedPage> {
   @override
   void initState() {
     super.initState();
-    _medicines = MedicineService().getAllMedicines();
+    _refresh();
   }
 
   Future<void> _refresh() async {
     setState(() {
-      _medicines = MedicineService().getAllMedicines();
+      _medicines = MedicineService().fetchMedicines();
     });
   }
 
@@ -49,8 +49,9 @@ class _SavedPageState extends State<SavedPage> {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.hasError)
+          if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
+          }
           final meds = snapshot.data ?? [];
           return ListView.builder(
             itemCount: meds.length,

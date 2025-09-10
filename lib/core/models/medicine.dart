@@ -1,5 +1,5 @@
 class Medicine {
-  final int id;
+  final int? id; // nullable for new medicines
   final String brandNameEn;
   final String genericNameEn;
   final String brandNameBn;
@@ -9,7 +9,7 @@ class Medicine {
   final List<String> alternatives;
 
   Medicine({
-    required this.id,
+    this.id,
     required this.brandNameEn,
     required this.genericNameEn,
     required this.brandNameBn,
@@ -19,25 +19,32 @@ class Medicine {
     required this.alternatives,
   });
 
-  factory Medicine.fromJson(Map<String, dynamic> json) => Medicine(
-        id: json['id'],
-        brandNameEn: json['brandNameEn'],
-        genericNameEn: json['genericNameEn'],
-        brandNameBn: json['brandNameBn'],
-        genericNameBn: json['genericNameBn'],
-        barcode: json['barcode'],
-        strength: json['strength'],
-        alternatives: List<String>.from(json['alternatives'] ?? []),
-      );
+  factory Medicine.fromJson(Map<String, dynamic> json) {
+    return Medicine(
+      id: json['id'] as int?,
+      brandNameEn: json['brand_name_en'] ?? '',
+      genericNameEn: json['generic_name_en'] ?? '',
+      brandNameBn: json['brand_name_bn'] ?? '',
+      genericNameBn: json['generic_name_bn'] ?? '',
+      barcode: json['barcode'] ?? '',
+      strength: json['strength'] ?? '',
+      alternatives: (json['alternatives'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'brandNameEn': brandNameEn,
-        'genericNameEn': genericNameEn,
-        'brandNameBn': brandNameBn,
-        'genericNameBn': genericNameBn,
-        'barcode': barcode,
-        'strength': strength,
-        'alternatives': alternatives,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'brand_name_en': brandNameEn,
+      'generic_name_en': genericNameEn,
+      'brand_name_bn': brandNameBn,
+      'generic_name_bn': genericNameBn,
+      'barcode': barcode,
+      'strength': strength,
+      'alternatives': alternatives,
+    };
+  }
 }

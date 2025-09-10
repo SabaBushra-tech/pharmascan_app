@@ -1,39 +1,44 @@
-import 'package:postgrest/postgrest.dart';
-import '../../core/models/medicine.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:pharmascan_app/core/models/medicine.dart';
 
 class MedicineService {
-  // Replace with your Supabase URL & anon key
-  final String supabaseUrl = 'YOUR_SUPABASE_URL';
-  final String supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+  final _client = Supabase.instance.client;
 
-  late final PostgrestClient _client;
-
-  MedicineService() {
-    _client = PostgrestClient(supabaseUrl, headers: {
-      'apikey': supabaseKey,
-      'Authorization': 'Bearer $supabaseKey',
-      'Content-Type': 'application/json',
-    });
+  /// Fetch all medicines
+  Future<List<Medicine>> fetchMedicines() async {
+    final response = await _client.from('medicines').select();
+    final data = response as List<dynamic>;
+    return data
+        .map((e) => Medicine.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
-  // Get all medicines
-  Future<List<Medicine>> getAllMedicines() async {
-    final List<dynamic> response = await _client.from('medicines').select();
-    return response.map((json) => Medicine.fromJson(json)).toList();
+  /// Insert a new medicine
+  Future<Medicine?> addMedicine(Medicine medicine) async {
+    final response = await _client
+        .from('medicines')
+        .insert(medicine.toJson())
+        .select()
+        .single();
+    return Medicine.fromJson(response);
   }
 
-  // Add medicine
-  Future<void> addMedicine(Medicine med) async {
-    await _client.from('medicines').insert([med.toMap()]);
+  /// Update existing medicine
+  Future<void> updateMedicine(Medicine medicine) async {
+    if (medicine.id == null) return;
+    await _client
+        .from('medicines')
+        .update(medicine.toJson())
+        .eq('id', medicine.id!);
   }
 
-  // Update medicine
-  Future<void> updateMedicine(Medicine med) async {
-    await _client.from('medicines').update(med.toMap()).eq('id', med.id);
-  }
-
-  // Delete medicine
+  /// Delete medicine
   Future<void> deleteMedicine(int id) async {
     await _client.from('medicines').delete().eq('id', id);
+  }
+
+  /// Get all medicines (wrapper for fetchMedicines)
+  Future<List<Medicine>> getAllMedicines() async {
+    return await fetchMedicines();
   }
 }
