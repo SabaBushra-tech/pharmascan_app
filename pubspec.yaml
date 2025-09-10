@@ -29,5 +29,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/welcome_bg.png
+    - assets/images/signin_image.png
+    - assets/images/signup_image.png
     - assets/translations/
     - assets/data/medicines.json
