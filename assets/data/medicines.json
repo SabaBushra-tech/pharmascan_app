@@ -1,0 +1,50 @@
+[
+  {
+    "id": "paracetamol_a",
+    "brand_name_en": "Paracetamol 500 mg (Brand A)",
+    "brand_name_bn": "প্যারাসিটামল ৫০০ মিগ্রা (ব্র্যান্ড A)",
+    "generic_name_en": "Paracetamol",
+    "generic_name_bn": "প্যারাসিটামল",
+    "strength": "500 mg",
+    "form": "Tablet",
+    "manufacturer": "Demo Pharma Ltd.",
+    "uses_en": "Fever, mild to moderate pain.",
+    "uses_bn": "জ্বর, হালকা থেকে মাঝারি ব্যথা।",
+    "side_effects_en": "Generally well tolerated. Rare: nausea, rash.",
+    "side_effects_bn": "সাধারণত সহনীয়। বিরল: বমিবমি ভাব, র‍্যাশ।",
+    "barcode": "8901234567890",
+    "alternatives": ["paracetamol_b"]
+  },
+  {
+    "id": "paracetamol_b",
+    "brand_name_en": "Paracetamol 500 mg (Brand B)",
+    "brand_name_bn": "প্যারাসিটামল ৫০০ মিগ্রা (ব্র্যান্ড B)",
+    "generic_name_en": "Paracetamol",
+    "generic_name_bn": "প্যারাসিটামল",
+    "strength": "500 mg",
+    "form": "Tablet",
+    "manufacturer": "HealthCare Pharma Co.",
+    "uses_en": "Fever, mild to moderate pain.",
+    "uses_bn": "জ্বর, হালকা থেকে মাঝারি ব্যথা।",
+    "side_effects_en": "Rare: nausea, rash.",
+    "side_effects_bn": "বিরল: বমিবমি ভাব, র‍্যাশ।",
+    "barcode": "8909876543210",
+    "alternatives": ["paracetamol_a"]
+  },
+  {
+    "id": "omeprazole_c",
+    "brand_name_en": "Omeprazole 20 mg (Brand C)",
+    "brand_name_bn": "ওমেপ্রাজল ২০ মিগ্রা (ব্র্যান্ড C)",
+    "generic_name_en": "Omeprazole",
+    "generic_name_bn": "ওমেপ্রাজল",
+    "strength": "20 mg",
+    "form": "Capsule",
+    "manufacturer": "WellMed Pharmaceuticals",
+    "uses_en": "Acid reflux, heartburn, gastric ulcers (as directed by doctor).",
+    "uses_bn": "অ্যাসিডিটি, হার্টবার্ন, গ্যাস্ট্রিক আলসার (ডাক্তারের পরামর্শমতো)।",
+    "side_effects_en": "Headache, abdominal pain; consult a professional if severe.",
+    "side_effects_bn": "মাথাব্যথা, পেটে ব্যথা; গুরুতর হলে বিশেষজ্ঞের সাথে কথা বলুন।",
+    "barcode": "8934567890123",
+    "alternatives": []
+  }
+]

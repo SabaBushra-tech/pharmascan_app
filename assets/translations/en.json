@@ -1,0 +1,20 @@
+{
+  "app_title": "PharmaScan",
+  "scan": "Scan",
+  "search": "Search",
+  "saved": "Saved",
+  "settings": "Settings",
+  "not_found": "No match found",
+  "tap_to_scan": "Point camera at barcode",
+  "search_hint": "Search by name or generic",
+  "alternatives": "Alternatives",
+  "use": "Uses",
+  "side_effects": "Side effects",
+  "manufacturer": "Manufacturer",
+  "strength": "Strength",
+  "form": "Form",
+  "language": "Language",
+  "english": "English",
+  "bangla": "Bangla",
+  "made_for_bd_note": "This demo database is for learning only. Always consult a professional for medical decisions."
+}
