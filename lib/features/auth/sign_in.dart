@@ -1,4 +1,6 @@
+// lib/features/auth/sign_in.dart
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -8,86 +10,119 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _emailCtrl = TextEditingController();
+  final _passCtrl = TextEditingController();
+  bool _loading = false;
+
+  Future<void> _signIn() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _loading = true);
+    final supabase = Supabase.instance.client;
+
+    try {
+      // New API:
+      await supabase.auth.signInWithPassword(
+        email: _emailCtrl.text.trim(),
+        password: _passCtrl.text,
+      );
+
+      // After sign-in check the session:
+      final session = supabase.auth.currentSession;
+      if (session != null) {
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        // maybe the API returned no session but no exception -> show message
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sign in failed. Please try again.')),
+        );
+      }
+    } catch (e) {
+      // Show error message
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign in error: ${e.toString()}')),
+      );
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Background image
-          SizedBox.expand(
-            child: Image.asset(
-              'assets/images/signin_image.png', // Add your sign-in image
-              fit: BoxFit.cover,
-            ),
-          ),
-          // Dark overlay
-          Container(color: Colors.black.withOpacity(0.5)),
-          // Sign in form
-          Center(
+      body: Stack(children: [
+        SizedBox.expand(
+          child:
+              Image.asset('assets/images/signin_image.png', fit: BoxFit.cover),
+        ),
+        // ignore: deprecated_member_use
+        Container(color: Colors.black.withOpacity(0.45)),
+        SafeArea(
+          child: Center(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  Text(
-                    'Sign In',
-                    style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.9),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      const Text('Sign In',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _emailCtrl,
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Enter email' : null,
+                        keyboardType: TextInputType.emailAddress,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.9),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _passCtrl,
+                        decoration:
+                            const InputDecoration(labelText: 'Password'),
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Enter password' : null,
+                        obscureText: true,
                       ),
-                    ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: _loading ? null : _signIn,
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(48)),
+                        child: _loading
+                            ? const CircularProgressIndicator()
+                            : const Text('Sign In'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/signup');
+                        },
+                        child: const Text("Don't have an account? Sign Up"),
+                      ),
+                    ]),
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Your existing sign in function
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    ),
-                    child: Text('Sign In', style: TextStyle(fontSize: 18)),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/signup');
-                    },
-                    child: Text('Don\'t have an account? Sign Up',
-                        style: TextStyle(color: Colors.white)),
-                  )
-                ],
+                ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 }

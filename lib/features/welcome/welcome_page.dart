@@ -18,6 +18,7 @@ class WelcomePage extends StatelessWidget {
           ),
           // Dark overlay
           Container(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.5),
           ),
           // Content
@@ -25,7 +26,7 @@ class WelcomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Welcome to PharmaScan',
                   style: TextStyle(
                     fontSize: 28,
@@ -39,15 +40,16 @@ class WelcomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignInPage(),
+                        builder: (context) => const SignInPage(),
                       ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Get Started',
                     style: TextStyle(fontSize: 18),
                   ),
